@@ -1,20 +1,9 @@
 # ⛏ MCStats Viewer
 
-> A zero-dependency dashboard to explore your Minecraft player **statistics**, **live state** (inventory, health, position…), and track **progress over time** — with optional **live auto-import** from a running server.
-
-<p align="center">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
-  <img src="https://img.shields.io/badge/NBT%20parser-built--in-60a5fa?style=for-the-badge" alt="NBT parser">
-  <img src="https://img.shields.io/badge/bridge-Python%20stdlib-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python bridge">
-  <img src="https://img.shields.io/badge/License-MIT-a78bfa?style=for-the-badge" alt="MIT License">
-</p>
-
+> A zero-dependency dashboard to explore your Minecraft player **statistics**, **live state** (inventory, health, position…), and track **progress over time** — with optional **live auto-import** from a running server. The **live auto-import** works only if you are hosting your server on your machine, if u are using a hosting service like bisect hosting or other platforms etc, you need to upload the .json and .dat files manually, if you want to start to hosting a server on your computer, use crafty controller (i'm using it) it's great, Enjoy!
 ---
 
-> 📸 **Add a screenshot here** — open the dashboard with some data loaded, save it as `screenshot.png`, then replace this line with:
-> `![MCStats Viewer Preview](screenshot.png)`
+`![MCStats Viewer Preview](screenshot.png)`
 
 ---
 
@@ -61,9 +50,8 @@ When run on the machine that holds the server world files (via the included brid
 No setup, no server needed.
 
 1. Download `mc-stats-viewer.html`.
-2. (Optional) add an `icons/` folder with the textures — see [Item icons](#-item-icons).
-3. Open the file in a modern browser (double-click).
-4. Drag & drop a player's files:
+2. Open the file in a modern browser (double-click).
+3. Drag & drop a player's files:
 
 ```
 your-server/
@@ -88,8 +76,8 @@ mc-stats-viewer/
 │   ├── mc-stats-viewer.html
 │   ├── mc-stats-bridge.py
 │   └── icons/
-│       ├── item/   (or items/)
-│       └── block/  (or blocks/)
+│       ├── item/
+│       └── block/
 └── json&nbt/                     ← on-disk archive (history lives here, created automatically)
     └── <uuid>/
         ├── index.json
@@ -137,15 +125,7 @@ In **Live mode**, history is stored **on disk** in the archive folder (`json&nbt
 
 ## 🖼️ Item icons
 
-Real textures aren't bundled (they're Mojang assets — download them yourself).
-
-1. Get the default Java Edition textures from **[mcasset.cloud](https://mcasset.cloud/)** (pick the latest version — texture file names are backward-compatible across versions).
-2. Create an `icons/` folder next to the HTML.
-3. Copy the PNGs from `assets/minecraft/textures/item/` and `assets/minecraft/textures/block/` into it.
-
-The lookup tries `icons/<name>.png`, then `icons/item(s)/<name>.png`, then `icons/block(s)/<name>.png`, and falls back to an emoji if nothing is found — so the app works with or without the icons.
-
-> Want true 3D inventory-style block icons? Use the **IconExporter** mod (Forge/Fabric) to render them, then drop the PNGs into `icons/`.
+1. If icons aren't working probably they are outdated (like if mojang adds new blocks or items), to resolve this problem, go get the default Java Edition textures from **[mcasset.cloud](https://mcasset.cloud/)** (pick the latest version — texture file names are backward-compatible across versions). Overwrite the current block and item folders and rename them (block for blocks and item for items, WITHOUT THE "S").
 
 ---
 
@@ -159,42 +139,11 @@ A **gzip-compressed NBT** binary file. The viewer includes a **built-in NBT pars
 
 ---
 
-## 🧰 Tech stack
-
-| Part | Tech |
-|---|---|
-| Page | HTML5, CSS3, vanilla JavaScript (ES2020), no framework |
-| `.dat` reading | Custom NBT parser + `DecompressionStream` |
-| Charts | Inline SVG |
-| Bridge | Python 3 standard library only |
-| Persistence | `localStorage` (manual) or on-disk archive (Live mode) |
-| Names & skins | Mojang API / Crafatar |
-
----
-
 ## ✅ Compatibility
 
 - **Browsers:** modern Firefox and Chromium-based browsers.
 - **Minecraft:** tested against Java Edition 1.20.x and the 1.20.5+ data format.
 - **Bridge:** Python 3.7+ (no packages to install).
-
----
-
-## 🔐 Security notes (bridge)
-
-- Binds to `127.0.0.1` only — not reachable from the network.
-- Read-only on your world; it only reads `stats/*.json` and `playerdata/*.dat`.
-- Path traversal is blocked.
-
----
-
-## 🗺️ Roadmap
-
-- [ ] Multi-player comparison on the same chart
-- [ ] Export a stats card as a shareable image
-- [ ] Search & filter inside leaderboards and inventory
-- [ ] Bundled fonts for fully offline use
-- [ ] Bedrock Edition support
 
 ---
 
@@ -205,5 +154,5 @@ Released under the [MIT License](LICENSE). Fork it, mod it, and share it with yo
 ---
 
 <p align="center">
-  Made with ❤️ for Minecraft server admins tired of reading raw JSON and NBT
+  Made with ❤️ for Minecraft server admins that are hosting on their machines and want to see the stats of the players 
 </p>
