@@ -3,7 +3,7 @@
 > A zero-dependency dashboard to explore your Minecraft player **statistics**, **live state** (inventory, health, position…), and track **progress over time** — with optional **live auto-import** from a running server. The **live auto-import** works only if you are hosting your server on your machine, if u are using a hosting service like bisect hosting or other platforms etc, you need to upload the .json and .dat files manually, if you want to start to hosting a server on your computer, use crafty controller (i'm using it) it's great, Enjoy!
 ---
 
-`![MCStats Viewer Preview](screenshot.png)`
+![MCStats Viewer Preview](screenshot.png)
 
 ---
 
