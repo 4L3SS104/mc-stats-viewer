@@ -1,155 +1,198 @@
 # ⛏ MCStats Viewer
 
-> A zero-dependency dashboard to explore your Minecraft player **statistics**, **live state** (inventory, health, position…), and track **progress over time** — all in a single HTML file, fully offline.
+> A zero-dependency dashboard to explore your Minecraft player **statistics**, **live state** (inventory, health, position…), and track **progress over time** — with optional **live auto-import** from a running server.
 
 <p align="center">
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
   <img src="https://img.shields.io/badge/NBT%20parser-built--in-60a5fa?style=for-the-badge" alt="NBT parser">
-  <img src="https://img.shields.io/badge/no%20dependencies-✓-4ade80?style=for-the-badge" alt="No dependencies">
+  <img src="https://img.shields.io/badge/bridge-Python%20stdlib-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python bridge">
   <img src="https://img.shields.io/badge/License-MIT-a78bfa?style=for-the-badge" alt="MIT License">
 </p>
 
 ---
 
-> 📸 **Add a screenshot here** — open the dashboard with some data loaded, take a screenshot, save it as `screenshot.png` next to the HTML file, then replace this line with:
-> `![MCStats Viewer Preview](screenshot.png)`
+![MCStats Viewer Preview](screenshot.png)
 
 ---
 
 ## ✨ Features
 
-The app is split into **three sections**:
+The app has **three sections**:
 
 ### 📊 Statistics
 - Overview cards: playtime, deaths, mob kills, distance (walking / running / flying), jumps, damage dealt & taken, animals bred, fish caught, nights slept, and more
 - Ranked leaderboards with pixel-style bars: mined blocks, killed mobs, used / crafted / picked-up / dropped items, and "killed by"
-- Emoji icons for hundreds of blocks, mobs and items
+- Real Minecraft item textures (with emoji fallback)
 
 ### 🎒 Player State
 Reads the binary player data file and shows:
-- ❤️ **Health** rendered as Minecraft hearts (half-hearts supported)
-- 🍖 **Hunger** rendered as drumsticks
-- ✨ **Experience** bar with current level and total XP
+- ❤️ **Health** as Minecraft hearts (half-hearts supported) and 🍖 **Hunger** as drumsticks
+- ✨ **Experience** bar with level and total XP
 - 🎮 **Game mode** (Survival / Creative / Adventure / Spectator)
-- 📍 **Positions** — current location, last death point, and respawn point, each with its dimension
-- 🎒 **Full inventory** in Minecraft-style slots: armor, off-hand, hotbar and main inventory
-- 📦 **Ender chest** contents
-- 🟪 **Shulker boxes** are clickable — click one to reveal what's inside it
-- ✦ Enchanted items are highlighted
+- 📍 **Positions** — current, last death, and respawn point, each with its dimension
+- 🎒 **Full inventory** in Minecraft-style slots: armor, off-hand, hotbar, main inventory
+- 📦 **Ender chest** contents and clickable **shulker boxes** (click to see what's inside)
+- ✦ Enchanted items highlighted, with **enchantments shown on hover** (name + level)
 
 ### 📈 History
-- Every statistics file you load is **saved locally with a timestamp**
-- **Duplicate detection** — if you re-import an identical file, it's skipped automatically
-- **Charts over time** (once you have 2+ snapshots on different days): playtime, deaths, blocks mined, mobs killed, distance walked
-- Snapshot table with per-entry delete
-- Assign a **custom name** to any player via the ✏️ button — it sticks across sessions
+- Snapshots saved with a timestamp every time stats are imported
+- **Duplicate detection** — identical snapshots are skipped automatically
+- **Charts over time**: playtime, deaths, blocks mined, mobs killed, distance walked
+- Snapshot table with per-entry delete, plus custom per-player names
+
+### 🛰️ Live server mode (optional)
+When run on the machine that holds the server world files (via the included bridge):
+- **Auto-import** all players on a **configurable interval** (15 min → 24 h)
+- **🔄 Refresh** button to update the current player on demand
+- **History saved on disk** in your own folder — it survives even if the browser is cleared
 
 ### 🔒 General
-- **100% local & private** — files are read only in your browser, nothing is ever uploaded
-- **Zero install, zero dependencies** — one `.html` file, no build step, no server
-- Auto-fetches player **name** and **skin avatar** from Mojang using the UUID
+- **100% local & private** — nothing is ever uploaded
+- **Zero dependencies** — a single `.html` file; the bridge uses only the Python standard library
+- Auto-fetches player **name** and **skin avatar** from Mojang
 
 ---
 
-## 🚀 How to Use
+## 🚀 Quick Start (manual mode)
 
-### 1. Locate your files
+No setup, no server needed.
 
-Minecraft splits player data across **two files**, both named after the player's UUID:
+1. Download `mc-stats-viewer.html`.
+2. (Optional) add an `icons/` folder with the textures — see [Item icons](#-item-icons).
+3. Open the file in a modern browser (double-click).
+4. Drag & drop a player's files:
 
 ```
 your-server/
 └── world/
-    ├── stats/
-    │   └── <player-uuid>.json   ← 📊 statistics  (blocks, mobs, playtime…)
-    └── playerdata/
-        └── <player-uuid>.dat    ← 🎒 live state  (inventory, health, position…)
+    ├── stats/<uuid>.json   ← 📊 statistics
+    └── playerdata/<uuid>.dat  ← 🎒 inventory, health, position…
 ```
 
-> **On Crafty Controller:** open the server's file manager and browse to `world/stats/` and `world/playerdata/`. You can also reach them directly on the host machine.
+You can load either file alone or both together (same UUID = merged view).
 
-You can load **either file on its own** or **both together** — same UUID means they merge into one view.
+---
 
-### 2. Open the viewer
+## 🛰️ Live Mode — real-time auto-import
 
-Download `mc-stats-viewer.html` and open it in a modern browser — **double-click is enough**, no server required.
+> **Why a bridge?** Browsers cannot read or write files from a typed path (security sandbox). The included `mc-stats-bridge.py` runs on the machine that has the server files, reads `stats/` and `playerdata/`, and saves a timestamped archive to disk. The page then imports from it automatically. **This only works if you have the server world files on your own machine.**
+
+### Recommended folder layout
+
+```
+mc-stats-viewer/
+├── viewer/                       ← page + bridge + icons
+│   ├── mc-stats-viewer.html
+│   ├── mc-stats-bridge.py
+│   └── icons/
+│       ├── item/   (or items/)
+│       └── block/  (or blocks/)
+└── json&nbt/                     ← on-disk archive (history lives here, created automatically)
+    └── <uuid>/
+        ├── index.json
+        ├── 2026-06-16T14-30-00-000000Z.json   (raw stats)
+        └── 2026-06-16T14-30-00-000000Z.dat    (raw player data)
+```
+
+### Run it
+
+From inside the `viewer/` folder:
 
 ```bash
-firefox mc-stats-viewer.html
-# or
-google-chrome mc-stats-viewer.html
+python3 mc-stats-bridge.py
 ```
 
-### 3. Load the files
+Then open **`http://localhost:8723/`** in your browser. Opening through the bridge URL is recommended — everything is same-origin, so it works in **every browser including Firefox**, and the icons load too.
 
-Drag & drop the `.json` and/or `.dat` files onto the drop zone (or click to browse). Use the **＋ Add file** button to add the other file later.
+Options:
+
+```bash
+python3 mc-stats-bridge.py --world /path/to/server/world   # preset the world path
+python3 mc-stats-bridge.py --data /path/to/archive         # change the archive folder
+python3 mc-stats-bridge.py --port 9000                     # change the port
+```
+
+### Use it
+
+1. On the start screen click **🛰️ Live server mode**.
+2. Enter the **world folder path** (the folder that contains `stats/` and `playerdata/`) and click **Connect**.
+3. In the **live bar** at the top you can:
+   - switch player from the dropdown,
+   - press **🔄 Refresh** to update the current player right now,
+   - toggle **Auto** and pick the **interval** (every 15 min up to every 24 h).
+
+> Finding the world path on **Crafty Controller**: it's usually under `crafty/servers/<server-id>/world`. If your `level-name` in `server.properties` isn't `world`, the folder is named after that instead.
+
+### Where the history lives
+
+In **manual mode**, history is stored in the browser's `localStorage` (per browser + per origin).
+In **Live mode**, history is stored **on disk** in the archive folder (`json&nbt/` by default) and no longer depends on the browser — it's only removed if you delete the files yourself.
+
+> The `&` in `json&nbt` is a valid folder name on Linux/macOS; the bridge accesses it via the filesystem, not via URL, so there's no issue. Rename it freely and point the bridge at it with `--data`.
 
 ---
 
-## 🗂️ Tracking progress over time
+## 🖼️ Item icons
 
-The **History** section turns the viewer into a progress tracker:
+Real textures aren't bundled (they're Mojang assets — download them yourself).
 
-1. Import a player's `.json` stats file today → it's saved as a dated snapshot
-2. Import the same player's stats again in a few days → a new snapshot is added
-3. Once there are **2 or more** snapshots, charts appear automatically
+1. Get the default Java Edition textures from **[mcasset.cloud](https://mcasset.cloud/)** (pick the latest version — texture file names are backward-compatible across versions).
+2. Create an `icons/` folder next to the HTML.
+3. Copy the PNGs from `assets/minecraft/textures/item/` and `assets/minecraft/textures/block/` into it.
 
-The more often you import, the more detailed the graphs. Identical files are detected via a content hash and won't create duplicate snapshots.
+The lookup tries `icons/<name>.png`, then `icons/item(s)/<name>.png`, then `icons/block(s)/<name>.png`, and falls back to an emoji if nothing is found — so the app works with or without the icons.
 
-> History is stored in your browser's `localStorage`, meaning it lives **on the device/browser where you open the file**. It persists when you open the HTML locally or host it (e.g. GitHub Pages). It does **not** sync between devices.
+> Want true 3D inventory-style block icons? Use the **IconExporter** mod (Forge/Fabric) to render them, then drop the PNGs into `icons/`.
 
 ---
 
-## 📂 File Formats
+## 📂 File formats
 
 ### Statistics (`.json`)
-Plain JSON. Distances are in **centimeters**, time in **game ticks** (20 ticks = 1 second). The viewer converts everything to readable units.
-
-```json
-{
-  "stats": {
-    "minecraft:custom": { "minecraft:play_time": 864000, "minecraft:deaths": 12 },
-    "minecraft:mined":  { "minecraft:stone": 2048, "minecraft:diamond_ore": 34 },
-    "minecraft:killed": { "minecraft:zombie": 200, "minecraft:creeper": 87 }
-  }
-}
-```
+Plain JSON. Distances are in **centimeters**, time in **game ticks** (20 ticks = 1 second); the viewer converts everything to readable units.
 
 ### Player data (`.dat`)
-A **gzip-compressed NBT** (Named Binary Tag) binary file — not JSON. The viewer includes a **built-in NBT parser** and uses the browser's native `DecompressionStream` to read it, so no libraries are needed. Relevant fields read: `Health`, `foodLevel`, `XpLevel` / `XpP` / `XpTotal`, `playerGameType`, `Pos`, `Dimension`, `LastDeathLocation`, `Spawn*`, `Inventory`, `EnderItems`, and shulker `BlockEntityTag.Items`.
+A **gzip-compressed NBT** binary file. The viewer includes a **built-in NBT parser** and uses the browser's native `DecompressionStream`. It supports **both** the old `tag` format (≤ 1.20.4) and the new `components` format (1.20.5+) for inventory, enchantments, shulker contents, and custom names.
 
 ---
 
-## 🧰 Tech Stack
+## 🧰 Tech stack
 
-| Technology | Purpose |
+| Part | Tech |
 |---|---|
-| HTML5 + CSS3 (grid, flexbox, custom properties) | Structure & styling |
-| Vanilla JavaScript (ES2020) | Logic & rendering, no framework |
-| Custom NBT parser + `DecompressionStream` | Reading `.dat` player files |
-| Inline SVG | History charts |
-| `localStorage` | Persisting history snapshots |
-| [VT323](https://fonts.google.com/specimen/VT323) / [Inter](https://fonts.google.com/specimen/Inter) / [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) | Typography |
-| [Crafatar](https://crafatar.com) / [Mojang API](https://wiki.vg/Mojang_API) | Avatars & player names |
+| Page | HTML5, CSS3, vanilla JavaScript (ES2020), no framework |
+| `.dat` reading | Custom NBT parser + `DecompressionStream` |
+| Charts | Inline SVG |
+| Bridge | Python 3 standard library only |
+| Persistence | `localStorage` (manual) or on-disk archive (Live mode) |
+| Names & skins | Mojang API / Crafatar |
 
 ---
 
 ## ✅ Compatibility
 
-- **Browsers:** Firefox and Chromium-based browsers (recent versions). The `.dat` reader requires `DecompressionStream`, supported in all modern browsers.
-- **Minecraft:** tested against the **Java Edition 1.20.x** player data format. Other versions may store some fields differently.
+- **Browsers:** modern Firefox and Chromium-based browsers.
+- **Minecraft:** tested against Java Edition 1.20.x and the 1.20.5+ data format.
+- **Bridge:** Python 3.7+ (no packages to install).
+
+---
+
+## 🔐 Security notes (bridge)
+
+- Binds to `127.0.0.1` only — not reachable from the network.
+- Read-only on your world; it only reads `stats/*.json` and `playerdata/*.dat`.
+- Path traversal is blocked.
 
 ---
 
 ## 🗺️ Roadmap
 
 - [ ] Multi-player comparison on the same chart
-- [ ] Export a snapshot or stats card as a shareable image
+- [ ] Export a stats card as a shareable image
 - [ ] Search & filter inside leaderboards and inventory
-- [ ] Bundled fonts for fully offline use (no Google Fonts request)
-- [ ] Item textures instead of emoji (optional resource pack support)
+- [ ] Bundled fonts for fully offline use
 - [ ] Bedrock Edition support
 
 ---
