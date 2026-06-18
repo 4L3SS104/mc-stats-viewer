@@ -1,6 +1,6 @@
 # ⛏ MCStats Viewer
 
-> A zero-dependency dashboard to explore your Minecraft player **statistics**, **live state** (inventory, health, position…), and track **progress over time** — with optional **live auto-import** from a running server. The **live auto-import** works only if you are hosting your server on your machine, if u are using a hosting service like bisect hosting or other platforms etc, you need to upload the .json and .dat files manually, if you want to start to hosting a server on your computer, use crafty controller (i'm using it) it's great, Enjoy!
+> A dashboard to explore your Minecraft player **statistics**, **live state** (inventory, health, position…), and track **progress over time** — with optional **live auto-import** from a running server. The **live auto-import** works only if you are hosting your server on your machine, if u are using a hosting service like bisect hosting or other platforms etc, you need to upload the .json and .dat files manually, if you want to start to hosting a server on your computer, use crafty controller (i'm using it) it's great, Enjoy!
 ---
 
 ![MCStats Viewer Preview](screenshot.png)
@@ -49,18 +49,10 @@ When run on the machine that holds the server world files (via the included brid
 
 No setup, no server needed.
 
-1. Download `mc-stats-viewer.html`.
-2. Open the file in a modern browser (double-click).
-3. Drag & drop a player's files:
+1. Download the repo and double click on `mc-stats-viewer.html`.
+2. Drag & drop a player's files: (You can find the player's files in world/playerdata and in world/stats)
 
-```
-your-server/
-└── world/
-    ├── stats/<uuid>.json   ← 📊 statistics
-    └── playerdata/<uuid>.dat  ← 🎒 inventory, health, position…
-```
-
-You can load either file alone or both together (same UUID = merged view).
+You can load either file alone or both together (same UUID).
 
 ---
 
@@ -106,7 +98,7 @@ python3 mc-stats-bridge.py --port 9000                     # change the port
 ### Use it
 
 1. On the start screen click **🛰️ Live server mode**.
-2. Enter the **world folder path** (the folder that contains `stats/` and `playerdata/`) and click **Connect**.
+2. Enter the **world folder path** (the folder that contains `stats/` and `playerdata/`) and click **Connect**. Es.(home/name/crafty/server/UUID world/world).
 3. In the **live bar** at the top you can:
    - switch player from the dropdown,
    - press **🔄 Refresh** to update the current player right now,
@@ -116,40 +108,14 @@ python3 mc-stats-bridge.py --port 9000                     # change the port
 
 ### Where the history lives
 
-In **manual mode**, history is stored in the browser's `localStorage` (per browser + per origin).
+In **manual mode**, history is stored in the browser's `localStorage` (per browser + per origin), but if u prefer u can save them in the folder: json&nbt.
 In **Live mode**, history is stored **on disk** in the archive folder (`json&nbt/` by default) and no longer depends on the browser — it's only removed if you delete the files yourself.
-
-> The `&` in `json&nbt` is a valid folder name on Linux/macOS; the bridge accesses it via the filesystem, not via URL, so there's no issue. Rename it freely and point the bridge at it with `--data`.
 
 ---
 
 ## 🖼️ Item icons
 
 1. If icons aren't working probably they are outdated (like if mojang adds new blocks or items), to resolve this problem, go get the default Java Edition textures from **[mcasset.cloud](https://mcasset.cloud/)** (pick the latest version — texture file names are backward-compatible across versions). Overwrite the current block and item folders and rename them (block for blocks and item for items, WITHOUT THE "S").
-
----
-
-## 📂 File formats
-
-### Statistics (`.json`)
-Plain JSON. Distances are in **centimeters**, time in **game ticks** (20 ticks = 1 second); the viewer converts everything to readable units.
-
-### Player data (`.dat`)
-A **gzip-compressed NBT** binary file. The viewer includes a **built-in NBT parser** and uses the browser's native `DecompressionStream`. It supports **both** the old `tag` format (≤ 1.20.4) and the new `components` format (1.20.5+) for inventory, enchantments, shulker contents, and custom names.
-
----
-
-## ✅ Compatibility
-
-- **Browsers:** modern Firefox and Chromium-based browsers.
-- **Minecraft:** tested against Java Edition 1.20.x and the 1.20.5+ data format.
-- **Bridge:** Python 3.7+ (no packages to install).
-
----
-
-## 📄 License
-
-Released under the [MIT License](LICENSE). Fork it, mod it, and share it with your server community.
 
 ---
 
