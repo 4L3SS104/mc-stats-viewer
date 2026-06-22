@@ -49,7 +49,7 @@ When run on the machine that holds the server world files (via the included brid
 
 No setup, no server needed.
 
-1. Download the repo and double click on `mc-stats-viewer.html`.
+1. Download the repo and double click on `index.html`.
 2. Drag & drop a player's files: (You can find the player's files in world/playerdata and in world/stats)
 
 You can load either file alone or both together (same UUID).
@@ -64,8 +64,8 @@ You can load either file alone or both together (same UUID).
 
 ```
 mc-stats-viewer/
-├── viewer/                       ← page + bridge + icons
-│   ├── mc-stats-viewer.html
+├── docs/                         ← page + bridge + icons
+│   ├── index.html
 │   ├── mc-stats-bridge.py
 │   └── icons/
 │       ├── item/
@@ -79,7 +79,7 @@ mc-stats-viewer/
 
 ### Run it
 
-From inside the `viewer/` folder:
+From inside the `docs/` folder:
 
 ```bash
 python3 mc-stats-bridge.py
